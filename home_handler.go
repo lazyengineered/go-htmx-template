@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+    "html/template"
+    "net/http"
+)
 
 type HomeHandler struct {
 }
@@ -10,7 +13,7 @@ func NewHomeHandler() *HomeHandler {
 }
 
 func (*HomeHandler) Home() http.HandlerFunc {
-    t := NewTemplate("layout", "home")
+    t := template.Must(template.ParseFS(templatesFS, "templates/layout.html", "templates/home.html"))
 
     return func(w http.ResponseWriter, r *http.Request) {
         t.Execute(w, nil)
@@ -18,7 +21,7 @@ func (*HomeHandler) Home() http.HandlerFunc {
 }
 
 func (*HomeHandler) Clicked() http.HandlerFunc {
-    t := NewTemplate("home")
+    t := template.Must(template.ParseFS(templatesFS, "templates/home.html"))
 
     return func(w http.ResponseWriter, r *http.Request) {
         t.ExecuteTemplate(w, "clicked", nil)
