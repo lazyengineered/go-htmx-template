@@ -20,6 +20,10 @@ func main() {
         t.Execute(w, nil)
     })
 
+    s.HandleFunc("POST /clicked", func(w http.ResponseWriter, r *http.Request) {
+        t.ExecuteTemplate(w, "clicked", nil)
+    })
+
     slog.Info("Listening on http://localhost:3000...")
 
     http.ListenAndServe(":3000", s)
