@@ -1,14 +1,23 @@
 package main
 
 import (
+    "embed"
+    "html/template"
     "log/slog"
     "net/http"
 )
 
+var (
+    //go:embed templates/*
+    templatesFS embed.FS
+)
+
 func main() {
     s := http.NewServeMux()
+
+    t := template.Must(template.ParseFS(templatesFS, "templates/layout.html", "templates/home.html"))
     s.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-        w.Write([]byte("Hello, world"))
+        t.Execute(w, nil)
     })
 
     slog.Info("Listening on http://localhost:3000...")
